@@ -115,3 +115,4 @@ def get_tags_split(df, train_or_test='train', imfile_column='image_file'):
             f'data/tags_{train_or_test}/' + x.split('/')[-1].replace('jpg', 'txt')
         )
     ))
+
