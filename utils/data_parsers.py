@@ -13,7 +13,7 @@ import gensim
 def load_dataframe(train_or_test='train'):
     """Loads dataframe with resnet features vectors (as a list in one column), descriptions (as a list in one column), and tags""" 
 
-    df = get_resnet_features(train_or_test=train_or_test)
+    df = pd.DataFrame(get_resnet_features(train_or_test=train_or_test))
 
     df['descriptions'] = get_descriptions(df, train_or_test=train_or_test)
     df['tags'] = get_tags(df, train_or_test=train_or_test)
