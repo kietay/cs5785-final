@@ -20,9 +20,9 @@ def load_dataframe(train_or_test='train'):
     df['descriptions'] = get_descriptions(df, train_or_test=train_or_test)
     df['tags'] = get_tags(df, train_or_test=train_or_test)
     df['word_list'] = get_word_list(df, train_or_test=train_or_test)
-    df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
+    classes, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
 
-    return df
+    return classes, df
 
 
 def get_resnet_features(train_or_test='train'):
@@ -165,4 +165,4 @@ def get_word_vec(df, train_or_test='train'):
     wordVecs = mlb.fit_transform(df['word_list'])
     wordVecs = [[e] for e in wordVecs]
 
-    return pd.DataFrame(wordVecs)
+    return mlb.classes_, pd.DataFrame(wordVecs)
