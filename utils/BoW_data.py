@@ -142,7 +142,7 @@ def get_tags_vec(df, train_or_test='train'):
     return mlb, pd.DataFrame(tagVecs)
 
 
-def to_word_list(s):
+def to_word_list(descs):
     ps = PorterStemmer()
     tokenizer = RegexpTokenizer(r'\w+')
     stop_words = {'ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there',
@@ -160,8 +160,8 @@ def to_word_list(s):
                   'which', 'those', 'i', 'after', 'few', 'whom', 't', 'being', 'if',
                   'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
                         'further', 'was', 'here', 'than'}
-    lower = []
-    for l in s:
+    lower = ""
+    for l in descs:
         lower = lower + l
     tokens = tokenizer.tokenize(lower)
     tokens = [w for w in tokens if not w in stop_words]
