@@ -160,7 +160,9 @@ def to_word_list(s):
                   'which', 'those', 'i', 'after', 'few', 'whom', 't', 'being', 'if',
                   'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
                         'further', 'was', 'here', 'than'}
-    lower = s[0].lower()
+    lower = []
+    for l in s:
+        lower = lower + l
     tokens = tokenizer.tokenize(lower)
     tokens = [w for w in tokens if not w in stop_words]
     return [ps.stem(t) for t in tokens]
