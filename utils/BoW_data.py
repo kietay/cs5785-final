@@ -14,15 +14,22 @@ import gensim
 
 def load_dataframe(train_or_test='train'):
     """Loads dataframe with resnet features vectors (as a list in one column), descriptions (as a list in one column), and tags"""
+    ps = PorterStemmer()
 
     df = pd.DataFrame(get_resnet_features(train_or_test=train_or_test))
 
     df['descriptions'] = get_descriptions(df, train_or_test=train_or_test)
-    df['tags'] = get_tags(df, train_or_test=train_or_test)
+    tags = get_tags(df, train_or_test=train_or_test)
+    df['tags'] = tags
+    df['tags_values'] = tags.apply(lambda l: [ps.stem(x.split(':')[1]) for x in l])
+    mlb_tags, df['tags_vec'] = get_tags_vec(df, train_or_test=train_or_test)
     df['word_list'] = get_word_list(df, train_or_test=train_or_test)
-    classes, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
+    
+    if train_or_test == 'train':
+        mlb_words, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
+        return mlb_tags, mlb_words, df
 
-    return classes, df
+    return mlb_tags, None, df
 
 
 def get_resnet_features(train_or_test='train'):
@@ -131,6 +138,13 @@ def get_tags_split(df, train_or_test='train', imfile_column='image_file'):
         )
     ))
 
+def get_tags_vec(df, train_or_test='train'):
+    mlb = MultiLabelBinarizer()
+    tagVecs = mlb.fit_transform(df['tags_values'])
+    tagVecs = [[e] for e in tagVecs]
+
+    return mlb, pd.DataFrame(tagVecs)
+
 
 def to_word_list(s):
     ps = PorterStemmer()
@@ -165,4 +179,4 @@ def get_word_vec(df, train_or_test='train'):
     wordVecs = mlb.fit_transform(df['word_list'])
     wordVecs = [[e] for e in wordVecs]
 
-    return mlb.classes_, pd.DataFrame(wordVecs)
+    return mlb, pd.DataFrame(wordVecs)
