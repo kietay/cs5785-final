@@ -24,12 +24,8 @@ def load_dataframe(train_or_test='train'):
     df['tags_values'] = tags.apply(lambda l: [ps.stem(x.split(':')[1]) for x in l])
     mlb_tags, df['tags_vec'] = get_tags_vec(df, train_or_test=train_or_test)
     df['word_list'] = get_word_list(df, train_or_test=train_or_test)
-    
-    if train_or_test == 'train':
-        mlb_words, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
-        return mlb_tags, mlb_words, df
-
-    return mlb_tags, None, df
+    mlb_words, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
+    return mlb_tags, mlb_words, df
 
 
 def get_resnet_features(train_or_test='train'):
