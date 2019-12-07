@@ -162,7 +162,7 @@ def to_word_list(descs):
                         'further', 'was', 'here', 'than'}
     lower = ""
     for l in descs:
-        lower = lower + l
+        lower = lower + " " + descs
     tokens = tokenizer.tokenize(lower)
     tokens = [w for w in tokens if not w in stop_words]
     return [ps.stem(t) for t in tokens]
