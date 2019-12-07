@@ -161,8 +161,8 @@ def to_word_list(descs):
                   'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
                         'further', 'was', 'here', 'than'}
     lower = ""
-    for l in descs:
-        lower = lower + " " + descs
+    for s in descs:
+        lower = lower + " " + s
     tokens = tokenizer.tokenize(lower)
     tokens = [w for w in tokens if not w in stop_words]
     return [ps.stem(t) for t in tokens]
