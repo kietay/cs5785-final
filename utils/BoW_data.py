@@ -24,12 +24,8 @@ def load_dataframe(train_or_test='train'):
     df['tags_values'] = tags.apply(lambda l: [ps.stem(x.split(':')[1]) for x in l])
     mlb_tags, df['tags_vec'] = get_tags_vec(df, train_or_test=train_or_test)
     df['word_list'] = get_word_list(df, train_or_test=train_or_test)
-    
-    if train_or_test == 'train':
-        mlb_words, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
-        return mlb_tags, mlb_words, df
-
-    return mlb_tags, None, df
+    mlb_words, df['word_vector'] = get_word_vec(df, train_or_test=train_or_test)
+    return mlb_tags, mlb_words, df
 
 
 def get_resnet_features(train_or_test='train'):
@@ -146,7 +142,7 @@ def get_tags_vec(df, train_or_test='train'):
     return mlb, pd.DataFrame(tagVecs)
 
 
-def to_word_list(s):
+def to_word_list(descs):
     ps = PorterStemmer()
     tokenizer = RegexpTokenizer(r'\w+')
     stop_words = {'ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there',
@@ -164,7 +160,9 @@ def to_word_list(s):
                   'which', 'those', 'i', 'after', 'few', 'whom', 't', 'being', 'if',
                   'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how',
                         'further', 'was', 'here', 'than'}
-    lower = s[0].lower()
+    lower = ""
+    for s in descs:
+        lower = lower + " " + s
     tokens = tokenizer.tokenize(lower)
     tokens = [w for w in tokens if not w in stop_words]
     return [ps.stem(t) for t in tokens]
